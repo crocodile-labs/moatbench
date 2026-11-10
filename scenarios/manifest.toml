@@ -1,0 +1,4 @@
+# Bump `version` whenever a step, an expectation or a contested mark changes.
+# Results carry this version and a digest of every file in this directory.
+version = "0.1.0"
+origin = "Converted on 2026-11-09 from the MoatBench scenarios bundled with OpenMoat 0.19.0. Written by OpenMoat's authors. See README.md, Where this set came from."
