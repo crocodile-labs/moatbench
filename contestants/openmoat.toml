@@ -4,9 +4,9 @@
 # inside {tool_dir}. `openmoat init` then writes the real hook into the throwaway
 # ~/.claude/settings.json, and the runner reads the hook command from there.
 name = "openmoat"
-version = "0.18.0"
+version = "0.19.0"
 homepage = "https://github.com/crocodile-labs/openmoat"
-install = ["curl --proto '=https' --tlsv1.2 -LsSf https://github.com/crocodile-labs/openmoat/releases/download/v0.18.0/openmoat-installer.sh | sh"]
+install = ["curl --proto '=https' --tlsv1.2 -LsSf https://github.com/crocodile-labs/openmoat/releases/download/v0.19.0/openmoat-installer.sh | sh"]
 setup = ["{tool_dir}/home/.cargo/bin/openmoat init --hosts claude-code"]
 hook_from_settings = true
 version_command = "{tool_dir}/home/.cargo/bin/openmoat --version"
