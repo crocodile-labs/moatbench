@@ -1,0 +1,18 @@
+# OpenMoat, installed and wired by the same method as every other guard.
+# Installed by its public shell installer for this tag (macOS and Linux); it puts
+# the binary in ~/.cargo/bin, and the runner's HOME for install commands is
+# inside {tool_dir}. `openmoat init` then writes the real hook into the throwaway
+# ~/.claude/settings.json, and the runner reads the hook command from there.
+name = "openmoat"
+version = "0.18.0"
+homepage = "https://github.com/crocodile-labs/openmoat"
+install = ["curl --proto '=https' --tlsv1.2 -LsSf https://github.com/crocodile-labs/openmoat/releases/download/v0.18.0/openmoat-installer.sh | sh"]
+setup = ["{tool_dir}/home/.cargo/bin/openmoat init --hosts claude-code"]
+hook_from_settings = true
+version_command = "{tool_dir}/home/.cargo/bin/openmoat --version"
+
+[scope]
+summary = "Policy for shell, file, network and MCP calls and for its own files."
+source = "https://github.com/crocodile-labs/openmoat#readme"
+tools = ["Bash", "Read", "Write", "Edit", "WebFetch", "mcp"]
+categories = ["*"]

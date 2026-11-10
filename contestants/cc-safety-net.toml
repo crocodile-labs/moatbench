@@ -1,0 +1,15 @@
+# cc-safety-net: https://github.com/kenryu42/cc-safety-net
+name = "cc-safety-net"
+version = "2.7.8"
+homepage = "https://ccsafetynet.com"
+install = ["npm install --prefix {tool_dir} cc-safety-net@2.7.8 --ignore-scripts"]
+# This is the guard's own hook entry point. Its documented installer writes the
+# hook through a command of its own; the runner calls that hook directly.
+hook = "node {tool_dir}/node_modules/cc-safety-net/dist/bin/cc-safety-net.js hook --claude-code"
+version_command = "node {tool_dir}/node_modules/cc-safety-net/dist/bin/cc-safety-net.js --version"
+
+[scope]
+summary = "Blocks destructive commands and access to secrets such as SSH keys and .env files, from the shell and the agent's file tools. Not a sandbox; does not watch network egress."
+source = "https://github.com/kenryu42/cc-safety-net#readme (README of 2.7.8)"
+tools = ["Bash", "Read", "Write", "Edit"]
+categories = ["destructive", "exfiltration", "obfuscation"]

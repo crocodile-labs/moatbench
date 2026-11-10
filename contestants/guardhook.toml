@@ -1,0 +1,15 @@
+# guardhook: https://github.com/aurelio-nakamura/guardhook
+name = "guardhook"
+version = "0.2.0"
+homepage = "https://github.com/aurelio-nakamura/guardhook"
+install = ["npm install --prefix {tool_dir} guardhook@0.2.0 --ignore-scripts"]
+hook = "node {tool_dir}/node_modules/guardhook/dist/cli.js hook"
+# The matcher its README says `guardhook init` installs.
+matcher = "Bash|Write|Edit|MultiEdit|NotebookEdit"
+version_command = "node {tool_dir}/node_modules/guardhook/dist/cli.js --version"
+
+[scope]
+summary = "Vets Bash, Write and Edit calls: blocks destructive commands and credential leaks before they run."
+source = "https://github.com/aurelio-nakamura/guardhook#readme (README of 0.2.0)"
+tools = ["Bash", "Write", "Edit"]
+categories = ["destructive", "supply-chain"]
