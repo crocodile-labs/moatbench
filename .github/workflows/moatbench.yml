@@ -1,5 +1,4 @@
-# Proposed workflow. It is not active here: copy this file to
-# .github/workflows/moatbench.yml when this repository is published.
+# Runs the benchmark by hand, from the Actions tab.
 #
 # It runs on public runners and installs each guard at the version pinned in its
 # contestant file. Actions are pinned to full commit ids; the Python and Node
