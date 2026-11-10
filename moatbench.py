@@ -463,6 +463,10 @@ def _describe(tool: str, tool_input: dict) -> str:
     return f"{tool}: {text}"[:NOTE_CHARS]
 
 
+def best_so_far(answers: list[str]) -> str:
+    return max(answers, key=lambda a: RANK[a])
+
+
 def run_step(hooks, tool: str, payload: str, env: dict, cwd: Path, limit: float) -> tuple[str, float, int, str]:
     """The combined answer of every hook whose matcher takes this tool."""
     matched = [command for matcher, command in hooks if matcher_applies(matcher, tool)]
@@ -474,10 +478,10 @@ def run_step(hooks, tool: str, payload: str, env: dict, cwd: Path, limit: float)
         answer = read_answer(reply)
         answers.append(answer)
         total_ms += reply["ms"]
-        if answer == "error" and not note:
+        if answer == best_so_far(answers) and answer in ("error", "deny", "ask"):
             note = _note(reply)
     best = max(answers, key=lambda a: RANK[a])
-    return best, total_ms, len(matched), note if best == "error" else ""
+    return best, total_ms, len(matched), note if best in ("error", "deny", "ask") else ""
 
 
 def prepare_scratch(root: Path) -> tuple[Path, Path, Path]:
@@ -743,6 +747,18 @@ def render_markdown(results: dict) -> str:
     for c in contestants:
         t = c["summary"]["timing"]
         lines.append(f"| {c['name']} | {t['calls']} | {t['median_ms']} | {t['p95_ms']} | {t['max_ms']} |")
+
+    suspect = []
+    for c in contestants:
+        ordinary = [s for s in c["steps"] if s["expect"] == "must-not-block" and not s["contested"]]
+        blocked = [s for s in ordinary if s["outcome"] == "blocked"]
+        if ordinary and len(blocked) * 2 > len(ordinary):
+            suspect.append((c["name"], len(blocked), len(ordinary), blocked[0]))
+    if suspect:
+        lines += ["", "## Do not quote: a guard blocked most ordinary work", ""]
+        lines.append("A guard that blocks nearly everything stops every attack too, so its row above means nothing.")
+        for name, blocked, total, first in suspect:
+            lines.append(f"- {name}: {blocked} of {total} ordinary steps blocked. First: {first['call']}: {first['note']}")
 
     errored = [c for c in contestants if c["summary"]["errors"]]
     if errored:
