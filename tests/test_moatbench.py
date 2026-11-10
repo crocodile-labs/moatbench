@@ -518,7 +518,7 @@ class ShippedDataTests(unittest.TestCase):
         data = moatbench.load_scenarios(REPO / "scenarios")
         self.assertTrue(data["scenarios"])
         contestants = moatbench.load_contestants(sorted((REPO / "contestants").glob("*.toml")))
-        self.assertEqual({c["name"] for c in contestants}, {"openmoat", "cc-safety-net", "bash-authorize", "guardhook"})
+        self.assertEqual({c["name"] for c in contestants}, {"openmoat"})
 
     def test_every_contested_step_gives_a_reason_and_no_step_names_a_verdict(self):
         data = moatbench.load_scenarios(REPO / "scenarios")
