@@ -401,6 +401,16 @@ class EndToEndTests(unittest.TestCase):
             with self.assertRaises(moatbench.ConfigError):
                 moatbench.settings_hooks(home)
 
+    def test_settings_in_exec_form_keep_their_arguments(self):
+        home = self.root / "h"
+        (home / ".claude").mkdir(parents=True)
+        entry = {"type": "command", "command": "/opt/a b/guard", "args": ["run", "--home", "/x y"]}
+        document = {"hooks": {"PreToolUse": [{"matcher": "*", "hooks": [entry]}]}}
+        (home / ".claude" / "settings.test.json").write_text(json.dumps(document))
+        with mock.patch.object(moatbench, "SETTINGS_FILE", "settings.test.json"):
+            found = moatbench.settings_hooks(home)
+        self.assertEqual(found, [("*", "'/opt/a b/guard' run --home '/x y'")])
+
     def test_settings_mode_without_a_hook_reports_a_setup_failure(self):
         path = self.contestant("nohook", settings=True, extra='setup = ["true"]')
         results, _ = self.run_bench(path)

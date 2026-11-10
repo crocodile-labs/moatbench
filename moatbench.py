@@ -384,7 +384,10 @@ def settings_hooks(home: Path) -> list[tuple[str | None, str]]:
         for hook in entry.get("hooks", []):
             if hook.get("type") != "command" or "if" in hook:
                 raise ConfigError(f"{path}: only plain command hooks are supported, found {hook!r}")
-            found.append((entry.get("matcher"), hook["command"]))
+            # Exec form: `args` go to the program as written, with no shell.
+            args = hook.get("args")
+            command = shlex.join([hook["command"], *args]) if args else hook["command"]
+            found.append((entry.get("matcher"), command))
     if not found:
         raise ConfigError(f"{path}: no PreToolUse hook")
     return found
